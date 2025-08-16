@@ -1,0 +1,41 @@
+[
+  {
+    "id": "p_urea_50kg",
+    "sku": "AGR-URE-50",
+    "name": "Urea (50kg)",
+    "description": "High-nitrogen fertilizer suitable for most crops.",
+    "priceCents": 120000,
+    "imageUrl": "https://images.unsplash.com/photo-1607970669492-3cc39c2d68c1?q=80&w=1200&auto=format&fit=crop",
+    "stock": 7,
+    "category": "Fertilizers",
+    "isActive": true,
+    "createdAt": "2025-01-02T10:00:00Z",
+    "updatedAt": "2025-03-15T10:00:00Z"
+  },
+  {
+    "id": "p_npk_151515",
+    "sku": "AGR-NPK-151515",
+    "name": "NPK 15-15-15 (50kg)",
+    "description": "Balanced fertilizer for general purpose use.",
+    "priceCents": 135000,
+    "imageUrl": "https://images.unsplash.com/photo-1602524811965-8020abf2b79f?q=80&w=1200&auto=format&fit=crop",
+    "stock": 0,
+    "category": "Fertilizers",
+    "isActive": true,
+    "createdAt": "2025-02-05T09:00:00Z",
+    "updatedAt": "2025-03-18T12:00:00Z"
+  },
+  {
+    "id": "p_cutlass",
+    "sku": "AGR-CTL-001",
+    "name": "Cutlass (Machete)",
+    "description": "Durable steel blade for field work.",
+    "priceCents": 8500,
+    "imageUrl": "https://images.unsplash.com/photo-1523419409543-8f3ec7a3f35e?q=80&w=1200&auto=format&fit=crop",
+    "stock": 25,
+    "category": "Tools",
+    "isActive": true,
+    "createdAt": "2025-03-01T11:00:00Z",
+    "updatedAt": "2025-03-20T11:00:00Z"
+  }
+]

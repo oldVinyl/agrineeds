@@ -3,16 +3,24 @@ const BASE_URL = window.API_BASE_URL || "/mock";
 const USE_MOCK = BASE_URL === "/mock";
 
 async function mock(data) {
-  // tiny delay so UI feels realistic
   await new Promise(r => setTimeout(r, 120));
   return structuredClone(data);
+}
+
+// small helper for mock file fetch
+async function fetchMockJson(path) {
+  const res = await fetch(path, { headers: { "Content-Type": "application/json" } });
+  if (!res.ok) throw new Error(`Mock fetch failed: ${path}`);
+  return res.json();
 }
 
 // ----- PRODUCTS -----
 export async function getProducts(params = {}) {
   if (USE_MOCK) {
-    // Phase 0: return empty array; Phase 1 will load /mock/products.json
-    return mock([]);
+    // Phase 1: load from /mock/products.json
+    const data = await fetchMockJson("/mock/products.json");
+    // simple param filters can be added later; return raw for now
+    return data;
   }
   const qs = new URLSearchParams(params).toString();
   const res = await fetch(`${BASE_URL}/products${qs ? "?" + qs : ""}`);
