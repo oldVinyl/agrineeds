@@ -8,18 +8,33 @@ const routes = {
   "#admin": renderAdminView,
 };
 
+// function renderHome() {
+//   const el = document.createElement("div");
+//   el.className = "view home";
+//   el.innerHTML = `
+//     <section class="hero">
+//       <h1>Welcome to Agrineeds Agro Service</h1>
+//       <p>Your one-stop shop for fertilizers, pesticides, and farm tools.</p>
+//       <p><a href="#catalog" class="btn">Browse Products</a></p>
+//     </section>
+//   `;
+//   return el;
+// }
+
+// js/router.js (renderHome)
 function renderHome() {
+  const tpl = document.getElementById("home-template");
+  if (tpl && tpl.content) {
+    return tpl.content.cloneNode(true); // clones your original sections as-is
+  }
+  // Fallback (only if template missing)
   const el = document.createElement("div");
   el.className = "view home";
-  el.innerHTML = `
-    <section class="hero">
-      <h1>Welcome to Agrineeds Agro Service</h1>
-      <p>Your one-stop shop for fertilizers, pesticides, and farm tools.</p>
-      <p><a href="#catalog" class="btn">Browse Products</a></p>
-    </section>
-  `;
+  el.innerHTML = `<section class="hero"><h1>Welcome</h1></section>`;
   return el;
 }
+
+
 
 export function navigate(hash) {
   if (!hash.startsWith("#")) hash = `#${hash}`;

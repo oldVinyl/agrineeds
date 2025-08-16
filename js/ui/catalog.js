@@ -2,11 +2,18 @@
 import { ce } from "../utils/dom.js";
 
 export function renderCatalogView() {
-  const wrap = ce("section", { className: "view catalog" });
+  // reuse your 'products' styling so the page looks native
+  const wrap = ce("section", { className: "view products" });
   wrap.innerHTML = `
-    <h2>Our Products</h2>
-    <p>Catalog is getting ready… (Phase 1 will load dynamic products)</p>
-    <p><em>Next:</em> search, filter, pagination, prices, and per-product WhatsApp.</p>
+    <div class="container">
+      <div class="section-header">
+        <h2>Our Products</h2>
+        <p>Full catalog. (Becomes dynamic in Phase 1)</p>
+      </div>
+
+      <!-- grid that will be populated next phase -->
+      <div id="catalog-grid" class="product-grid"></div>
+    </div>
   `;
   return wrap;
 }

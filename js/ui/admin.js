@@ -4,8 +4,20 @@ import { ce } from "../utils/dom.js";
 export function renderAdminView() {
   const wrap = ce("section", { className: "view admin" });
   wrap.innerHTML = `
-    <h2>Admin Area</h2>
-    <p>Admin shell is scaffolded. We’ll add login and tabs in Phase 4.</p>
+    <div class="container">
+      <div class="section-header">
+        <h2>Admin</h2>
+        <p>Login + Products + Orders will appear here in later phases.</p>
+      </div>
+
+      <div class="admin-placeholder">
+        <ul>
+          <li>Products (CRUD)</li>
+          <li>Orders (status updates)</li>
+          <li>Dashboard (totals)</li>
+        </ul>
+      </div>
+    </div>
   `;
   return wrap;
 }
