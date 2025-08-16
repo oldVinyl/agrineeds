@@ -759,3 +759,33 @@ body {
 .product-card .stock { opacity: 0.9; }
 .product-card .desc { opacity: 0.9; margin-top: 0.5rem; }
 
+/* ====== Catalog controls (append-only) ====== */
+.catalog-controls {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin: 0.5rem 0 1rem;
+  flex-wrap: wrap;
+}
+.catalog-controls input[type="search"],
+.catalog-controls select {
+  padding: 0.55rem 0.7rem;
+  border: 1px solid rgba(0,0,0,0.14);
+  border-radius: 8px;
+  min-width: 220px;
+}
+
+/* Out of stock badge */
+.stock.oos { color: #b00020; font-weight: 700; }
+.wa-btn.disabled { pointer-events: none; opacity: 0.45; }
+
+/* Pager */
+.pager { display: flex; gap: 0.5rem; align-items: center; justify-content: center; margin: 1rem 0; }
+.page-btn {
+  padding: 0.45rem 0.8rem; border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.12); background: #fff; cursor: pointer;
+}
+.page-btn.active { font-weight: 700; }
+.page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.page-ellipsis { opacity: 0.6; padding: 0 0.25rem; }
+
