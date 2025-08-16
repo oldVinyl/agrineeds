@@ -687,3 +687,37 @@ body {
 .nav a:focus {
   opacity: 1;
 }
+
+/* ====== Mobile nav toggle (append-only) ====== */
+.nav {
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+/* hide the toggle button on desktop */
+.nav-toggle {
+  display: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* small screens */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .nav-toggle {
+    display: block;
+  }
+}
+
