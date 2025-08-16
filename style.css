@@ -666,52 +666,24 @@ body {
     }
 }
 
-/* ====== Router + Layout helpers (append-only) ====== */
-.app { min-height: 60vh; padding: 1rem; }
-
-.view { max-width: 1100px; margin: 0 auto; padding: 1rem; }
-
-/* Simple top nav; keeps your current theme intact */
+/* ====== Basic nav styles (append-only) ====== */
 .nav {
-  display: flex; gap: 1rem; align-items: center;
-  padding: 0.75rem 1rem; border-bottom: 1px solid rgba(0,0,0,0.08);
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  background: #fff; /* adjust if you want it transparent */
 }
+
 .nav a {
-  text-decoration: none; font-weight: 600;
-  opacity: 0.9;
-}
-.nav a:hover, .nav a:focus { opacity: 1; outline: none; }
-
-/* Hero section for the Home view */
-.hero { padding: 2rem 0; }
-.hero h1 { margin-bottom: 0.5rem; }
-.hero p { margin: 0.25rem 0; }
-
-/* Light button style (won’t override your existing .btn if more specific) */
-.btn {
-  display: inline-block;
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
-  border: 1px solid rgba(0,0,0,0.12);
-  background: #fff;
-  cursor: pointer;
-  transition: transform 120ms ease, box-shadow 120ms ease;
-}
-.btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
-.btn:focus { outline: 2px solid rgba(0,0,0,0.2); outline-offset: 2px; }
-
-/* Product card placeholder (keeps it neutral) */
-.product-card {
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 12px;
-  padding: 1rem;
-}
-.product-card .product-thumb img {
-  width: 100%; height: auto; border-radius: 8px; display: block;
+  text-decoration: none;
+  font-weight: 600;
+  color: inherit; /* use your page's text color */
+  opacity: 0.85;
 }
 
-/* Toast used by utils/dom.js */
-.toast {
-  box-shadow: 0 6px 22px rgba(0,0,0,0.2);
-  border-radius: 10px;
+.nav a:hover,
+.nav a:focus {
+  opacity: 1;
 }
