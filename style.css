@@ -971,3 +971,71 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .nav-links { transition: none !important; }
 }
+
+/* ====== Design tokens (non-invasive) ====== */
+:root {
+  --color-bg: #ffffff;
+  --color-text: #111111;
+  --color-accent: #007bff;
+  --color-muted: rgba(0,0,0,0.6);
+
+  --color-ok: #0a7f3f;
+  --color-warn: #cc8b00;
+  --color-danger: #b00020;
+
+  --radius-s: 6px;
+  --radius-m: 10px;
+  --radius-l: 12px;
+}
+
+/* ====== Focus (keyboard/a11y) ====== */
+:where(a, button, [role="button"], input, select, textarea).focus-visible,
+:where(a, button, [role="button"], input, select, textarea):focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-s);
+}
+
+/* ====== Visually hidden utility ====== */
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+
+/* ====== Badges (great for order status) ====== */
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-s);
+  font-size: 0.85rem;
+  line-height: 1;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: #f7f7f7;
+}
+.badge--pending    { background: #fff7e6; border-color: #ffe0a3; color: #8a6400; }  /* amber */
+.badge--confirmed  { background: #eef7ff; border-color: #cfe6ff; color: #0b63b9; }  /* blue */
+.badge--packed     { background: #f0f0ff; border-color: #d9d9ff; color: #4b49b6; }  /* indigo */
+.badge--en_route   { background: #eefaf3; border-color: #ccead7; color: #1b7f4a; }  /* green */
+.badge--delivered  { background: #eafaf0; border-color: #cdebd9; color: #0a7f3f; }  /* green-strong */
+.badge--cancelled  { background: #fff0f3; border-color: #ffcdd2; color: #b00020; }  /* red */
+
+/* ====== Button variants ====== */
+.btn-primary {
+  background: var(--color-accent); color: #fff;
+  border: 1px solid rgba(0,0,0,0.12);
+}
+.btn-danger {
+  background: #fff0f3; color: var(--color-danger);
+  border: 1px solid #ffcdd2;
+}
+
+/* ====== Spacing utilities (opt-in) ====== */
+.mt-1 { margin-top: 0.25rem; } .mt-2 { margin-top: 0.5rem; } .mt-3 { margin-top: 1rem; }
+.mb-1 { margin-bottom: 0.25rem; } .mb-2 { margin-bottom: 0.5rem; } .mb-3 { margin-bottom: 1rem; }
+.p-1 { padding: 0.25rem; } .p-2 { padding: 0.5rem; } .p-3 { padding: 1rem; }
+
+/* ====== Keep prior perf/a11y tweaks intact (re-assert minimal) ====== */
+.product-card .product-thumb { background: #f6f6f6; }

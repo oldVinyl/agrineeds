@@ -58,6 +58,19 @@ export function renderAdminOrders() {
     return items.map(i => `${i.name} × ${i.qty}`).join(", ");
   }
 
+function statusBadge(status = "") {
+  const key = String(status).toLowerCase();
+  const map = {
+    pending: "badge--pending",
+    confirmed: "badge--confirmed",
+    packed: "badge--packed",
+    en_route: "badge--en_route",
+    delivered: "badge--delivered",
+    cancelled: "badge--cancelled",
+  };
+  const cls = map[key] || "";
+  return `<span class="badge ${cls}">${status}</span>`;
+}
 
   function row(o) {
     const tr = ce("tr");
@@ -65,7 +78,7 @@ export function renderAdminOrders() {
       <td>${formatDate(o.createdAt)}</td>
       <td><div><strong>${o.customer?.name || "-"}</strong></div><div>${o.customer?.phone || ""}</div></td>
       <td>${itemsSummary(o.items)}</td>
-      <td><strong>${o.status}</strong></td>
+      <td>${statusBadge(o.status)}</td>
       <td>${o.note ? o.note : ""}</td>
       <td class="actions"></td>
     `;
