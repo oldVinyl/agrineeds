@@ -15,7 +15,7 @@ function renderHome() {
   if (tpl && tpl.content) return tpl.content.cloneNode(true);
   const el = document.createElement("div");
   el.className = "view home";
-  el.innerHTML = `<section class="hero"><h1>Welcome</h1></section>`;
+  el.innerHTML = `<section class="hero"><h1>Welcome</h1><p>Home template not found.</p></section>`;
   return el;
 }
 
@@ -27,10 +27,21 @@ export function navigate(hash) {
 export function initRouter() {
   const app = document.getElementById("app");
   function render() {
-    const hash = window.location.hash || "#home";
-    const view = (routes[hash] || renderHome)();
-    app.innerHTML = "";
-    app.appendChild(view);
+    try {
+      const hash = window.location.hash || "#home";
+      const factory = routes[hash] || renderHome;
+      const view = factory();
+      app.innerHTML = "";
+      app.appendChild(view);
+    } catch (err) {
+      console.error("Route render failed:", err);
+      app.innerHTML = `
+        <section class="view">
+          <h2>We hit a snag loading this page.</h2>
+          <p>${(err && err.message) ? err.message : String(err)}</p>
+          <p><a href="#home">Go Home</a></p>
+        </section>`;
+    }
   }
   window.addEventListener("hashchange", render);
   render();

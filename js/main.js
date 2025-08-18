@@ -15,6 +15,20 @@ import * as api from "./api.js";
   initRouter();
 })();
 
+// highlight active nav link
+(function navActiveHighlight() {
+  const links = document.querySelectorAll(".nav-links a");
+  function updateActive() {
+    const hash = window.location.hash || "#home";
+    links.forEach(link => {
+      link.classList.toggle("active", link.getAttribute("href") === hash);
+    });
+  }
+  window.addEventListener("hashchange", updateActive);
+  updateActive(); // run on load
+})();
+
+
 // ====== mobile nav toggle (append-only) ======
 (function mobileNav() {
   const toggle = document.querySelector(".nav-toggle");
@@ -31,15 +45,10 @@ import * as api from "./api.js";
     setOpen(!isOpen);
   });
 
-  // close when a link is clicked
   links.addEventListener("click", (e) => {
     if (e.target.tagName === "A") setOpen(false);
   });
-
-  // close when route changes
   window.addEventListener("hashchange", () => setOpen(false));
-
-  // close when clicking outside
   document.addEventListener("click", (e) => {
     const withinNav = e.target.closest(".nav");
     if (!withinNav) setOpen(false);
@@ -56,6 +65,26 @@ try {
     }
   }
 } catch {}
+
+// ====== error overlay (append-only) ======
+(function errorOverlay(){
+  function show(msg){
+    const box = document.createElement("div");
+    Object.assign(box.style, {
+      position: "fixed", left: "12px", bottom: "12px",
+      maxWidth: "90vw",
+      background: "#fff3f3", color: "#b00020",
+      border: "1px solid #ffcdd2", borderRadius: "10px",
+      padding: "10px 14px", zIndex: 99999, fontFamily: "ui-sans-serif, system-ui",
+      boxShadow: "0 8px 22px rgba(0,0,0,0.15)", whiteSpace: "pre-wrap"
+    });
+    box.textContent = "App error: " + msg;
+    document.body.appendChild(box);
+    setTimeout(()=> box.remove(), 8000);
+  }
+  window.addEventListener("error", e => show(e.message || String(e.error||e)));
+  window.addEventListener("unhandledrejection", e => show(e.reason?.message || String(e.reason||e)));
+})();
 
 
 
