@@ -151,6 +151,11 @@ export function renderOrderFormView() {
 
     try {
       const created = await api.createOrder(payload);
+      
+      // remember order in state so dashboard metrics update
+      const current = Array.isArray(state.orders) ? state.orders : [];
+      setState({ orders: [...current, created] });
+
       toast("Order received. We’ll confirm shortly.");
 
       if (openWhatsappAfter) {

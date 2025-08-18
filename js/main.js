@@ -46,5 +46,16 @@ import * as api from "./api.js";
   });
 })();
 
+// restore persisted auth if present
+try {
+  const raw = localStorage.getItem("auth");
+  if (raw) {
+    const parsed = JSON.parse(raw);
+    if (parsed?.token) {
+      import("./state.js").then(({ setState }) => setState({ auth: parsed }));
+    }
+  }
+} catch {}
+
 
 
