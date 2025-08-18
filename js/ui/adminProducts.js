@@ -1,6 +1,6 @@
 // js/ui/adminProducts.js
 import { ce, toast } from "../utils/dom.js";
-import { state, setState } from "../state.js";
+import { state, setState, subscribe } from "../state.js";
 import * as api from "../api.js";
 
 export function renderAdminProducts() {
