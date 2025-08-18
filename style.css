@@ -1039,3 +1039,116 @@ body {
 
 /* ====== Keep prior perf/a11y tweaks intact (re-assert minimal) ====== */
 .product-card .product-thumb { background: #f6f6f6; }
+
+
+
+
+
+/* ====== THEME TOKENS (append-only) ====== */
+:root {
+  /* tweak these 3 to match your exact green theme */
+  --brand: #1b5e20;          /* primary green */
+  --brand-ink: #ffffff;      /* text on brand */
+  --brand-weak: #e6f2ea;     /* pale brand for hovers/badges */
+
+  /* neutrals (light) */
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f7f7f7;
+  --ink: #111111;
+  --ink-muted: rgba(0,0,0,0.65);
+  --line: rgba(0,0,0,0.10);
+  --shadow: 0 8px 24px rgba(0,0,0,0.10);
+
+  /* semantic */
+  --ok: #0a7f3f;
+  --warn: #cc8b00;
+  --danger: #b00020;
+
+  --radius-s: 6px;
+  --radius-m: 10px;
+  --radius-l: 12px;
+}
+
+/* Dark theme */
+:root[data-theme="dark"] {
+  --bg: #0f1115;
+  --surface: #141820;
+  --surface-2: #161b24;
+  --ink: #e8eaed;
+  --ink-muted: rgba(232,234,237,0.75);
+  --line: rgba(255,255,255,0.12);
+  --shadow: 0 8px 24px rgba(0,0,0,0.35);
+
+  /* brand in dark: slightly brighter hover */
+  --brand-weak: #183b24;
+}
+
+/* Base surfaces & text */
+body { background: var(--bg); color: var(--ink); }
+.nav { background: var(--surface); border-bottom: 1px solid var(--line); }
+.section-header p, .muted { color: var(--ink-muted); }
+
+/* Cards, tables, admin shells adopt theme */
+.product-card,
+.dashboard .card,
+.panel,
+.table,
+.admin-tabs .tab,
+.admin-login input,
+.admin-products input, .admin-products textarea, .admin-products select {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  box-shadow: none;
+}
+
+/* Buttons respecting theme */
+.btn { background: var(--brand); color: var(--brand-ink); border: 1px solid var(--brand); }
+.btn:hover { filter: brightness(1.05); }
+.btn.btn-light { background: var(--surface-2); color: var(--ink); border: 1px solid var(--line); }
+.btn-danger { background: #fff0f3; color: var(--danger); border: 1px solid #ffcdd2; }
+:root[data-theme="dark"] .btn-danger { background: #2a151a; border-color: #5b2a34; }
+
+/* Links in nav adopt brand on hover/active */
+.nav-links a:hover, .nav-links a:focus { background: var(--brand-weak); color: var(--brand); }
+.nav-links a.active { background: var(--brand-weak); color: var(--brand); font-weight: 600; }
+
+/* Pager & controls */
+.page-btn { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
+.catalog-controls input[type="search"], .catalog-controls select,
+.order-form input, .order-form select, .order-form textarea {
+  background: var(--surface); color: var(--ink); border: 1px solid var(--line);
+}
+
+/* Status badges unify with theme */
+.badge { background: var(--surface-2); border: 1px solid var(--line); color: var(--ink); }
+.badge--pending    { background: #fff7e6; border-color: #ffe0a3; color: #8a6400; }
+.badge--confirmed  { background: #eef7ff; border-color: #cfe6ff; color: #0b63b9; }
+.badge--packed     { background: #f0f0ff; border-color: #d9d9ff; color: #4b49b6; }
+.badge--en_route   { background: #eefaf3; border-color: #ccead7; color: #1b7f4a; }
+.badge--delivered  { background: #eafaf0; border-color: #cdebd9; color: #0a7f3f; }
+.badge--cancelled  { background: #fff0f3; border-color: #ffcdd2; color: #b00020; }
+
+/* Tables */
+.table th, .table td { border-bottom: 1px solid var(--line); }
+
+/* Product image placeholder respects theme */
+.product-card .product-thumb { background: var(--surface-2); }
+
+/* theme toggle button */
+.theme-toggle {
+  margin-left: auto; /* push links pane to the right on desktop */
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--ink);
+  border-radius: var(--radius-s);
+  padding: 0.35rem 0.55rem;
+  cursor: pointer;
+}
+
+/* on small screens keep it near the burger */
+@media (max-width: 768px) {
+  .theme-toggle { order: -1; margin-left: 0; }
+  .nav { gap: 0.5rem; }
+}

@@ -110,3 +110,41 @@ try {
     setTimeout(() => { if (isOpen()) firstLink()?.focus(); }, 0);
   });
 })();
+
+// ====== Theme toggle (append-only) ======
+(function themeToggle() {
+  const KEY = "ql_theme";
+  const btn = document.querySelector(".theme-toggle");
+  const root = document.documentElement;
+
+  function apply(theme) {
+    if (theme === "dark") root.setAttribute("data-theme", "dark");
+    else root.removeAttribute("data-theme");
+    localStorage.setItem(KEY, theme);
+    if (btn) btn.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+  }
+
+  // initial: saved theme or system preference
+  const saved = localStorage.getItem(KEY);
+  if (saved === "dark" || saved === "light") {
+    apply(saved);
+  } else {
+    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    apply(prefersDark ? "dark" : "light");
+  }
+
+  // react to system change
+  if (window.matchMedia) {
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+      const savedNow = localStorage.getItem(KEY);
+      // only auto-switch if user hasn't chosen explicitly
+      if (savedNow !== "dark" && savedNow !== "light") apply(e.matches ? "dark" : "light");
+    });
+  }
+
+  // button click
+  btn?.addEventListener("click", () => {
+    const current = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
+    apply(current === "dark" ? "light" : "dark");
+  });
+})();
