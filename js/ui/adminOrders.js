@@ -2,14 +2,10 @@
 import { ce, toast } from "../utils/dom.js";
 import { state, setState, subscribe } from "../state.js";
 import * as api from "../api.js";
+import { resendNotification } from "../utils/notify.js";   // ← NEW
 
 const STATUSES = ["PENDING", "CONFIRMED", "PACKED", "EN_ROUTE", "DELIVERED", "CANCELLED"];
-const NEXT_STATUS = {
-  PENDING: "CONFIRMED",
-  CONFIRMED: "PACKED",
-  PACKED: "EN_ROUTE",
-  EN_ROUTE: "DELIVERED",
-};
+const NEXT_STATUS = { PENDING: "CONFIRMED", CONFIRMED: "PACKED", PACKED: "EN_ROUTE", EN_ROUTE: "DELIVERED" };
 
 export function renderAdminOrders() {
   const wrap = ce("div", { className: "admin-orders" });
@@ -62,14 +58,12 @@ export function renderAdminOrders() {
     return items.map(i => `${i.name} × ${i.qty}`).join(", ");
   }
 
+
   function row(o) {
     const tr = ce("tr");
     tr.innerHTML = `
       <td>${formatDate(o.createdAt)}</td>
-      <td>
-        <div><strong>${o.customer?.name || "-"}</strong></div>
-        <div>${o.customer?.phone || ""}</div>
-      </td>
+      <td><div><strong>${o.customer?.name || "-"}</strong></div><div>${o.customer?.phone || ""}</div></td>
       <td>${itemsSummary(o.items)}</td>
       <td><strong>${o.status}</strong></td>
       <td>${o.note ? o.note : ""}</td>
@@ -77,7 +71,6 @@ export function renderAdminOrders() {
     `;
     const actions = tr.querySelector(".actions");
 
-    // Advance
     const next = NEXT_STATUS[o.status];
     if (next) {
       const advanceBtn = ce("button", { className: "btn", textContent: `Mark ${next}` });
@@ -91,7 +84,6 @@ export function renderAdminOrders() {
       actions.appendChild(advanceBtn);
     }
 
-    // Cancel (only when not delivered/cancelled)
     if (o.status !== "DELIVERED" && o.status !== "CANCELLED") {
       const cancelBtn = ce("button", { className: "btn btn-light", textContent: "Cancel" });
       cancelBtn.addEventListener("click", async () => {
@@ -105,16 +97,20 @@ export function renderAdminOrders() {
       actions.appendChild(cancelBtn);
     }
 
-    // Resend notification (stub)
+    // centralized resend stub
     const resendBtn = ce("button", { className: "btn btn-light", textContent: "Resend notification" });
-    resendBtn.addEventListener("click", () => {
-      // stub: this would call your backend later
-      toast("Resent (stub) — wire to backend later.");
+    resendBtn.addEventListener("click", async () => {
+      try {
+        const res = await resendNotification(o);
+        if (res?.ok) toast("Notification resent (stub).");
+        else toast("Failed to resend (stub).");
+      } catch (e) { console.error(e); toast("Failed to resend (stub)."); }
     });
     actions.appendChild(resendBtn);
 
     return tr;
   }
+
 
   function applyFilter(list) {
     const sel = statusFilter.value;

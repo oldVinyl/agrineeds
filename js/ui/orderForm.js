@@ -2,8 +2,9 @@
 import { ce, toast } from "../utils/dom.js";
 import { state, setState, subscribe } from "../state.js";
 import * as api from "../api.js";
-import { isNonEmptyString, isPositiveInt } from "../utils/validation.js";
+import { isNonEmptyString, safeInt } from "../utils/validation.js";
 import { buildProductMessage, buildWhatsappLink } from "../utils/whatsapp.js";
+import { confirmOrder } from "../utils/order.js";
 
 export function renderOrderFormView() {
   const wrap = ce("section", { className: "view order" });
@@ -64,13 +65,34 @@ export function renderOrderFormView() {
   const noteEl = form.querySelector("#note");
   const waPreviewBtn = wrap.querySelector("#waPreview");
 
-  // populate product dropdown
+  function showErr(input, msg) {
+    const id = input.getAttribute("id");
+    const el = form.querySelector(`.err[data-for="${id}"]`);
+    if (el) el.textContent = msg || "";
+  }
+
+  function clearErrs() {
+    form.querySelectorAll(".err").forEach(e => (e.textContent = ""));
+  }
+
+  function validateBasic() {
+    let ok = true;
+    if (!isNonEmptyString(nameEl.value)) { showErr(nameEl, "Please enter your name."); ok = false; }
+    else showErr(nameEl, "");
+    if (!isNonEmptyString(phoneEl.value)) { showErr(phoneEl, "Please enter your WhatsApp number."); ok = false; }
+    else showErr(phoneEl, "");
+    if (!isNonEmptyString(sel.value)) { showErr(sel, "Please select a product."); ok = false; }
+    else showErr(sel, "");
+    const qty = safeInt(qtyEl.value, 0);
+    if (!(qty >= 1)) { showErr(qtyEl, "Quantity must be a positive whole number."); ok = false; }
+    else showErr(qtyEl, "");
+    return ok;
+  }
+
   function paintProducts(products) {
     sel.innerHTML = `<option value="">Select a product</option>` +
       (products || []).filter(p => p.isActive !== false)
-        .map(p => `<option value="${p.id}">${p.name}</option>`)
-        .join("");
-    // preselect if coming from product card
+        .map(p => `<option value="${p.id}">${p.name}</option>`).join("");
     if (state.selectedProductId) {
       sel.value = state.selectedProductId;
       setState({ selectedProductId: null });
@@ -78,94 +100,50 @@ export function renderOrderFormView() {
   }
 
   const unsub = subscribe(s => {
-    if (sel.options.length <= 1 && s.products && s.products.length) {
-      paintProducts(s.products);
-    }
+    if (sel.options.length <= 1 && s.products?.length) paintProducts(s.products);
   });
 
   (async () => {
-    if (!state.products || state.products.length === 0) {
-      try {
-        const products = await api.getProducts();
-        setState({ products });
-      } catch (e) {
-        toast("Could not load products for order form.");
-        console.error(e);
-      }
-    } else {
-      paintProducts(state.products);
-    }
+    if (!state.products?.length) {
+      try { setState({ products: await api.getProducts() }); }
+      catch (e) { console.error(e); }
+    } else paintProducts(state.products);
   })();
 
-  function showErr(input, msg) {
-    const id = input.getAttribute("id");
-    const el = form.querySelector(`.err[data-for="${id}"]`);
-    if (el) el.textContent = msg || "";
-  }
+  async function submitOrder(openWhatsappAfter = true) {
+    clearErrs();
+    if (!validateBasic()) return;
 
-  function validate() {
-    let ok = true;
-
-    if (!isNonEmptyString(nameEl.value)) {
-      showErr(nameEl, "Please enter your name.");
-      ok = false;
-    } else showErr(nameEl, "");
-
-    // simple phone presence check; we can add a stricter regex later
-    if (!isNonEmptyString(phoneEl.value)) {
-      showErr(phoneEl, "Please enter your WhatsApp number.");
-      ok = false;
-    } else showErr(phoneEl, "");
-
-    if (!isNonEmptyString(sel.value)) {
-      showErr(sel, "Please select a product.");
-      ok = false;
-    } else showErr(sel, "");
-
-    const qty = parseInt(qtyEl.value, 10);
-    if (!isPositiveInt(qty)) {
-      showErr(qtyEl, "Quantity must be a positive whole number.");
-      ok = false;
-    } else showErr(qtyEl, "");
-
-    // stock check if we have product
     const product = (state.products || []).find(p => p.id === sel.value);
-    if (product && typeof product.stock === "number" && qty > product.stock) {
-      showErr(qtyEl, `Only ${product.stock} in stock.`);
-      ok = false;
+    const qty = safeInt(qtyEl.value, 0);
+    const check = confirmOrder(product, qty, noteEl.value);
+    if (!check.ok) {
+      if (check.reason?.toLowerCase().includes("stock")) showErr(qtyEl, check.reason);
+      toast(check.reason || "Could not confirm order.");
+      return;
     }
 
-    return ok;
-  }
-
-  async function submitOrder(openWhatsappAfter = true) {
-    if (!validate()) return;
-
-    const product = state.products.find(p => p.id === sel.value);
+    // enrich with customer
     const payload = {
-      items: [{ productId: product.id, name: product.name, priceCents: product.priceCents, qty: parseInt(qtyEl.value, 10) }],
-      customer: { name: nameEl.value.trim(), phone: phoneEl.value.trim() },
-      note: noteEl.value.trim(),
-      status: "PENDING",
+      ...check.payload,
+      customer: { name: nameEl.value.trim(), phone: phoneEl.value.trim() }
     };
 
     try {
       const created = await api.createOrder(payload);
-      
-      // remember order in state so dashboard metrics update
+      // Update state so dashboard/orders refresh
       const current = Array.isArray(state.orders) ? state.orders : [];
-      setState({ orders: [...current, created] });
+      setState({ orders: [created, ...current] });
 
       toast("Order received. We’ll confirm shortly.");
 
       if (openWhatsappAfter) {
-        const msg = buildProductMessage(product, payload.items[0].qty) + (payload.note ? `\n\nNote: ${payload.note}` : "");
+        const msg = buildProductMessage(product, qty) + (payload.note ? `\n\nNote: ${payload.note}` : "");
         const link = buildWhatsappLink(msg);
         try {
           const win = window.open(link, "_blank", "noopener");
           if (!win) throw new Error("Popup blocked");
         } catch {
-          // fallback: try web WhatsApp, then copy
           try {
             const web = window.open(`https://web.whatsapp.com/send?text=${encodeURIComponent(msg)}`, "_blank", "noopener");
             if (!web) throw new Error("Popup blocked");
@@ -177,8 +155,8 @@ export function renderOrderFormView() {
       }
       form.reset();
     } catch (e) {
-      toast("Could not submit order. Please try again.");
       console.error(e);
+      toast("Could not submit order. Please try again.");
     }
   }
 
@@ -189,15 +167,14 @@ export function renderOrderFormView() {
 
   waPreviewBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    if (!validate()) return;
+    if (!validateBasic()) return;
     const product = state.products.find(p => p.id === sel.value);
-    const msg = buildProductMessage(product, parseInt(qtyEl.value, 10)) + (noteEl.value.trim() ? `\n\nNote: ${noteEl.value.trim()}` : "");
+    const qty = safeInt(qtyEl.value, 0);
+    const msg = buildProductMessage(product, qty) + (noteEl.value.trim() ? `\n\nNote: ${noteEl.value.trim()}` : "");
     const link = buildWhatsappLink(msg);
     window.open(link, "_blank", "noopener");
   });
 
-  // clean up (defensive)
-  wrap.addEventListener("DOMNodeRemoved", () => unsub());
-
+  wrap.addEventListener("DOMNodeRemoved", () => unsub && unsub());
   return wrap;
 }
