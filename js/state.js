@@ -3,6 +3,7 @@ export const state = {
   products: [],
   orders: [],
   auth: null,
+  selectedProductId: null, // used to preselect in Order form
   _subs: new Set(),
 };
 

@@ -789,3 +789,28 @@ body {
 .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .page-ellipsis { opacity: 0.6; padding: 0 0.25rem; }
 
+/* ====== Order form (append-only) ====== */
+.order-form {
+  max-width: 640px;
+  padding: 1rem 0;
+  display: grid;
+  gap: 0.9rem;
+}
+.order-form .form-row { display: grid; gap: 0.35rem; }
+.order-form label { font-weight: 600; }
+.order-form input,
+.order-form select,
+.order-form textarea {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid rgba(0,0,0,0.14);
+  border-radius: 8px;
+}
+.order-form .err {
+  color: #b00020;
+  min-height: 1.1em;
+}
+.form-actions { display: flex; gap: 0.5rem; align-items: center; }
+.btn-light {
+  background: #f7f7f7;
+  border: 1px solid rgba(0,0,0,0.1);
+}

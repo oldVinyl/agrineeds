@@ -40,5 +40,24 @@ export function productCard(p) {
 
   actions.append(waBtn);
   card.append(thumb, title, price, stock, desc, actions);
+  
+  // Order button → preselect product and navigate to #order
+  const orderBtn = ce("a", {
+    className: "btn",
+    href: "#",
+    textContent: "Order",
+    onclick: (e) => {
+      e.preventDefault();
+      if (out) return;
+      // put selected product into state for the form to preselect
+      if (window.app?.state) {
+        window.app.state.selectedProductId = p.id;
+      }
+      if (window.app?.navigate) window.app.navigate("#order");
+      else window.location.hash = "#order";
+    }
+  });
+  actions.append(orderBtn);
+  
   return card;
 }
