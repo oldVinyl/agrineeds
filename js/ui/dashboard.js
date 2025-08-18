@@ -21,3 +21,13 @@ export function renderDashboard() {
   `;
   return wrap;
 }
+
+// optional: ensure orders are loaded once for metrics
+import * as api from "../api.js";
+import { setState } from "../state.js";
+(async () => {
+  try {
+    const items = await api.getOrders();
+    setState({ orders: items });
+  } catch {}
+})();

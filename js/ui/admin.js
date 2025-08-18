@@ -4,6 +4,7 @@ import * as api from "../api.js";
 import { state, setState, subscribe } from "../state.js";
 import { renderDashboard } from "./dashboard.js";
 import { renderAdminProducts } from "./adminProducts.js";
+import { renderAdminOrders } from "./adminOrders.js";
 
 export function renderAdminView() {
   const wrap = ce("section", { className: "view admin" });
@@ -33,7 +34,6 @@ export function renderAdminView() {
         </form>
       </div>
     `;
-
     const form = wrap.querySelector("#login-form");
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -41,7 +41,6 @@ export function renderAdminView() {
       const password = form.password.value.trim();
       const remember = form.querySelector("#remember").checked;
       if (!username || !password) return toast("Please enter username and password.");
-
       try {
         const res = await api.login({ username, password });
         setState({ auth: res });
@@ -53,11 +52,10 @@ export function renderAdminView() {
         toast("Login failed.");
       }
     });
-
     return wrap;
   }
 
-  // logged in shell
+  // logged-in shell
   wrap.innerHTML = `
     <div class="container admin-shell">
       <div class="admin-topbar">
@@ -81,18 +79,10 @@ export function renderAdminView() {
 
   function setActive(name) {
     tabs.forEach(t => t.classList.toggle("active", t.dataset.tab === name));
-    if (name === "dashboard") {
-      content.innerHTML = "";
-      content.appendChild(renderDashboard());
-    } else if (name === "products") {
-      content.innerHTML = "";
-      content.appendChild(renderAdminProducts());
-    } else if (name === "orders") {
-      content.innerHTML = `
-        <div class="section-header"><h3>Orders</h3></div>
-        <p>Orders table and status updates arrive next phase.</p>
-      `;
-    }
+    content.innerHTML = "";
+    if (name === "dashboard") content.appendChild(renderDashboard());
+    if (name === "products") content.appendChild(renderAdminProducts());
+    if (name === "orders") content.appendChild(renderAdminOrders());
   }
 
   tabs.forEach(btn => btn.addEventListener("click", () => setActive(btn.dataset.tab)));
