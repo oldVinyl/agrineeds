@@ -928,3 +928,24 @@ body {
   padding: 0.55rem 0.7rem; border: 1px solid rgba(0,0,0,0.14); border-radius: 8px;
 }
 .admin-orders .table td .btn { margin-right: 0.35rem; }
+
+/* ====== Dashboard polish (append-only) ====== */
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1rem;
+  margin: 1rem 0;
+}
+.panel {
+  grid-column: span 4;
+  padding: 1rem;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+  background: #fff;
+}
+@media (max-width: 900px) { .panel { grid-column: span 6; } }
+@media (max-width: 600px) { .panel { grid-column: span 12; } }
+
+.list { margin: 0.25rem 0; padding-left: 1rem; }
+.list li { margin: 0.25rem 0; }
+.muted { opacity: 0.7; }
