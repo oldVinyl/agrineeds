@@ -48,15 +48,15 @@
   { "token":"jwt-or-mock", "user": { "id": "u1", "role": "ADMIN" } }
 
 - Endpoints (same later for real backend)
-  GET   /products?search=&category=&page=&limit=
-  POST  /products
-  PATCH /products/:id
-  DELETE /products/:id
-  GET   /orders?status=
-  POST  /orders
-  PATCH /orders/:id
-  POST  /auth/login
-  POST  /auth/logout
+  GET     /products?search=&category=&page=&limit=
+  POST    /products
+  PATCH   /products/:id
+  DELETE  /products/:id
+  GET     /orders?status=
+  POST    /orders
+  PATCH   /orders/:id
+  POST    /auth/login
+  POST    /auth/logout
 
 ---
 

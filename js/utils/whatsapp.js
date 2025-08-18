@@ -1,7 +1,7 @@
 // js/utils/whatsapp.js
 
 // ✏️ set your business WhatsApp number here (or leave blank to open the generic wa.me screen)
-export const SHOP_PHONE = ""; // e.g., "2335XXXXXXX" (no +)
+export const SHOP_PHONE = "233203774464"; // e.g., "2335XXXXXXX" (no +)
 
 export function buildProductMessage({ name, priceCents, sku }, qty = 1) {
   const price = ((priceCents || 0) / 100).toFixed(2);
