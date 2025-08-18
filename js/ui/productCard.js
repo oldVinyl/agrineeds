@@ -13,6 +13,23 @@ export function productCard(p) {
     alt: p.name || "Product image",
     loading: "lazy",
   });
+
+  // fallback if image fails to load
+  img.onerror = () => {
+    img.onerror = null;
+    img.src =
+      "data:image/svg+xml;charset=UTF-8," +
+      encodeURIComponent(`
+        <svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'>
+          <rect width='100%' height='100%' fill='#f0f0f0'/>
+          <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle'
+                fill='#9aa0a6' font-size='24' font-family='system-ui, -apple-system, Segoe UI, Roboto, Arial'>
+            No image
+          </text>
+        </svg>
+      `);
+  };
+
   thumb.append(img);
 
   const title = ce("h3", { textContent: p.name || "Unnamed product" });

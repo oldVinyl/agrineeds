@@ -36,6 +36,10 @@ export function renderCatalogView() {
   const catSelect = wrap.querySelector("#cat");
   const pager = wrap.querySelector("#pager");
 
+  status.setAttribute("role", "status");
+  status.setAttribute("aria-live", "polite");
+
+
   // local UI state for this view (separate from global)
   let view = {
     q: "",

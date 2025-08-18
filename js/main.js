@@ -86,5 +86,27 @@ try {
   window.addEventListener("unhandledrejection", e => show(e.reason?.message || String(e.reason||e)));
 })();
 
+// ====== a11y: focus & esc for mobile nav (append-only) ======
+(function navA11y() {
+  const toggle = document.querySelector(".nav-toggle");
+  const linksWrap = document.querySelector(".nav-links");
+  if (!toggle || !linksWrap) return;
 
+  function isOpen() { return linksWrap.classList.contains("show"); }
+  function firstLink() { return linksWrap.querySelector("a"); }
 
+  // When opening, move focus to first link; on Esc, close and return focus to button
+  document.addEventListener("keydown", (e) => {
+    if (!isOpen()) return;
+    if (e.key === "Escape") {
+      linksWrap.classList.remove("show");
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.focus();
+    }
+  });
+
+  // After opening via the button, shift focus to first link (if present)
+  toggle.addEventListener("click", () => {
+    setTimeout(() => { if (isOpen()) firstLink()?.focus(); }, 0);
+  });
+})();

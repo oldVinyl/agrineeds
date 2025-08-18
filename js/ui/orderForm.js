@@ -58,6 +58,13 @@ export function renderOrderFormView() {
   `;
 
   const form = wrap.querySelector("#order-form");
+  
+  // Make inline errors announced by screen readers
+  form.querySelectorAll(".err").forEach(el => {
+    el.setAttribute("role", "alert");
+    el.setAttribute("aria-live", "polite");
+  });
+
   const sel = form.querySelector("#productId");
   const qtyEl = form.querySelector("#qty");
   const nameEl = form.querySelector("#custName");
