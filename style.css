@@ -898,3 +898,27 @@ body {
   font-weight: 600;
 }
 
+/* ====== Admin products (append-only) ====== */
+.admin-products .admin-form {
+  max-width: 520px; display: grid; gap: 0.7rem;
+}
+.admin-products .form-row { display: grid; gap: 0.35rem; }
+.admin-products input, .admin-products textarea, .admin-products select {
+  padding: 0.55rem 0.7rem;
+  border: 1px solid rgba(0,0,0,0.14);
+  border-radius: 8px;
+}
+.admin-products .admin-products-grid {
+  display: grid; grid-template-columns: repeat(12, 1fr); gap: 1rem; align-items: start;
+}
+.admin-products .admin-products-grid > section:first-child { grid-column: span 5; }
+.admin-products .admin-products-grid > section:last-child { grid-column: span 7; }
+@media (max-width: 900px) {
+  .admin-products .admin-products-grid > section { grid-column: span 12; }
+}
+.table-wrap { overflow-x: auto; }
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { padding: 0.55rem 0.6rem; border-bottom: 1px solid rgba(0,0,0,0.08); text-align: left; }
+.table thead th { white-space: nowrap; opacity: 0.75; font-weight: 700; }
+.table td.actions { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+

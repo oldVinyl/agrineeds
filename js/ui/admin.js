@@ -3,6 +3,7 @@ import { ce, toast } from "../utils/dom.js";
 import * as api from "../api.js";
 import { state, setState, subscribe } from "../state.js";
 import { renderDashboard } from "./dashboard.js";
+import { renderAdminProducts } from "./adminProducts.js";
 
 export function renderAdminView() {
   const wrap = ce("section", { className: "view admin" });
@@ -42,15 +43,11 @@ export function renderAdminView() {
       if (!username || !password) return toast("Please enter username and password.");
 
       try {
-        const res = await api.login({ username, password }); // mock returns token
+        const res = await api.login({ username, password });
         setState({ auth: res });
-        if (remember) {
-          localStorage.setItem("auth", JSON.stringify(res));
-        }
+        if (remember) localStorage.setItem("auth", JSON.stringify(res));
         toast("Welcome back!");
-        // re-render as the admin panel
-        const next = renderAdminView();
-        wrap.replaceWith(next);
+        wrap.replaceWith(renderAdminView());
       } catch (err) {
         console.error(err);
         toast("Login failed.");
@@ -60,7 +57,7 @@ export function renderAdminView() {
     return wrap;
   }
 
-  // Logged-in admin panel
+  // logged in shell
   wrap.innerHTML = `
     <div class="container admin-shell">
       <div class="admin-topbar">
@@ -88,39 +85,29 @@ export function renderAdminView() {
       content.innerHTML = "";
       content.appendChild(renderDashboard());
     } else if (name === "products") {
-      content.innerHTML = `
-        <div class="section-header"><h3>Products</h3></div>
-        <p>Products CRUD arrives in the next phase. You’ll be able to add/edit/delete and update stock.</p>
-      `;
+      content.innerHTML = "";
+      content.appendChild(renderAdminProducts());
     } else if (name === "orders") {
       content.innerHTML = `
         <div class="section-header"><h3>Orders</h3></div>
-        <p>Orders table and status updates arrive in the next phase.</p>
+        <p>Orders table and status updates arrive next phase.</p>
       `;
     }
   }
 
-  tabs.forEach(btn => {
-    btn.addEventListener("click", () => setActive(btn.dataset.tab));
-  });
-
+  tabs.forEach(btn => btn.addEventListener("click", () => setActive(btn.dataset.tab)));
   logoutBtn.addEventListener("click", () => {
     localStorage.removeItem("auth");
     setState({ auth: null });
     toast("Signed out.");
-    const next = renderAdminView();
-    wrap.replaceWith(next);
+    wrap.replaceWith(renderAdminView());
   });
 
-  // initial tab
   setActive("dashboard");
 
-  // keep dashboard reactive if state changes
   const unsub = subscribe(() => {
     const active = tabs.find(t => t.classList.contains("active"))?.dataset.tab || "dashboard";
-    if (active === "dashboard") {
-      setActive("dashboard");
-    }
+    if (active === "dashboard") setActive("dashboard");
   });
   wrap.addEventListener("DOMNodeRemoved", () => unsub());
 
