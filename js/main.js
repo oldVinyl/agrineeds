@@ -148,3 +148,14 @@ try {
     apply(current === "dark" ? "light" : "dark");
   });
 })();
+
+// keep content pushed below the fixed nav
+(function fixNavOffset() {
+  const nav = document.querySelector('.nav');
+  if (!nav) return;
+  const apply = () => {
+    document.body.style.setProperty('--nav-h', nav.offsetHeight + 'px');
+  };
+  apply();
+  window.addEventListener('resize', apply, { passive: true });
+})();
