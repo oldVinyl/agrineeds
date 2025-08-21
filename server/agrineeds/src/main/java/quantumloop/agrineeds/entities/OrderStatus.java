@@ -1,4 +1,10 @@
 package quantumloop.agrineeds.entities;
 
-public class OrderStatus {
+public enum OrderStatus {
+    PENDING,
+    CONFIRMED,
+    PACKED,
+    EN_ROUTE,
+    DELIVERED,
+    CANCELLED
 }

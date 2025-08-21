@@ -7,9 +7,10 @@ import quantumloop.agrineeds.repositories.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
@@ -21,9 +22,9 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    // GET user by ID
+    // GET user by id
     @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable Long id) {
+    public Optional<User> getUserById(@PathVariable UUID id) {
         return userRepository.findById(id);
     }
 
@@ -35,20 +36,26 @@ public class UserController {
 
     // UPDATE user
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-        return userRepository.findById(id)
-                .map(user -> {
-                    user.setUsername(updatedUser.getUsername());
-                    user.setEmail(updatedUser.getEmail());
-                    user.setPassword(updatedUser.getPassword());
-                    return userRepository.save(user);
-                })
-                .orElseThrow(() -> new RuntimeException("User not found with id " + id));
+    public User updateUser(@PathVariable UUID id, @RequestBody User updatedUser) {
+        return userRepository.findById(id).map(user -> {
+            user.setEmail(updatedUser.getEmail());
+            user.setPassword(updatedUser.getPassword());
+            user.setRole(updatedUser.getRole());
+            return userRepository.save(user);
+        }).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     // DELETE user
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
+    public void deleteUser(@PathVariable UUID id) {
         userRepository.deleteById(id);
     }
 }
+
+/* ENDPOINTS
+*   /api/users → fetch all
+*   /api/users/{id} → fetch single
+*   POST /api/users → create
+*   PUT /api/users/{id} → update
+*   DELETE /api/users/{id} → delete
+*/

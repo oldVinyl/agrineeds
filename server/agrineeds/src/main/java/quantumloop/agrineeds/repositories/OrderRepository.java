@@ -1,4 +1,8 @@
 package quantumloop.agrineeds.repositories;
 
-public class OrderRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import quantumloop.agrineeds.entities.Order;
+import java.util.UUID;
+
+public interface OrderRepository extends JpaRepository<Order, UUID> {
 }
