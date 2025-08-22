@@ -32,6 +32,11 @@ public class ProductService {
             if (updates.getName() != null) p.setName(updates.getName());
             if (updates.getPriceCents() != null) p.setPriceCents(updates.getPriceCents());
             if (updates.getIsActive() != null) p.setIsActive(updates.getIsActive());
+            if (updates.getDescription() != null) p.setDescription(updates.getDescription());
+            if (updates.getImageUrl() != null) p.setImageUrl(updates.getImageUrl());
+            if (updates.getCategory() != null) p.setCategory(updates.getCategory());
+            if (updates.getSku() != null) p.setSku(updates.getSku());
+            if (updates.getStock() != null) p.setStock(updates.getStock());
             return repo.save(p);
         }).orElseThrow(() -> new RuntimeException("Product not found"));
     }

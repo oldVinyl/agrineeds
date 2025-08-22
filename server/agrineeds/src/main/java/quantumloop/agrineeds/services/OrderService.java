@@ -8,6 +8,7 @@ import quantumloop.agrineeds.entities.OrderStatus;
 import quantumloop.agrineeds.repositories.OrderRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -44,5 +45,11 @@ public class OrderService {
             o.setStatus(status);
             return repo.save(o);
         }).orElseThrow(() -> new RuntimeException("Order not found"));
+    }
+
+    /** GET /oders/{id} - get buy id */
+    @Transactional
+    public Optional<Order> findById(UUID id) {
+        return repo.findById(id);
     }
 }

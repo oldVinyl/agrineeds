@@ -1,5 +1,6 @@
 package quantumloop.agrineeds.controllers;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import quantumloop.agrineeds.entities.Order;
 import quantumloop.agrineeds.entities.OrderStatus;
@@ -7,6 +8,7 @@ import quantumloop.agrineeds.models.StatusDto;
 import quantumloop.agrineeds.services.OrderService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -39,5 +41,11 @@ public class OrderController {
         }
         OrderStatus next = OrderStatus.valueOf(body.getStatus().toUpperCase());
         return service.updateOrderStatus(id, next);
+    }
+
+    @GetMapping("/{id}")
+    @Transactional(readOnly = true)
+    public Optional<Order> getOne(@PathVariable UUID id) {
+        return service.findById(id);  // returns the entity
     }
 }

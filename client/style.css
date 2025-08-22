@@ -59,8 +59,8 @@ body {
   --bg: #0f1115;
   --surface: #141820;
   --surface-2: #161b24;
-  --ink: #e8eaed;
-  --ink-muted: rgba(232,234,237,0.75);
+  --ink: #00553e;
+  --ink-muted: #00553eaf;
   --line: rgba(255,255,255,0.12);
   --shadow: 0 8px 24px rgba(0,0,0,0.35);
 
