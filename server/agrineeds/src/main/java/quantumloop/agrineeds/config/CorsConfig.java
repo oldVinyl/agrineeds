@@ -15,12 +15,11 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration cfg = new CorsConfiguration();
 
-        cfg.setAllowedOrigins(List.of(
-                "http://localhost:5173",  // Vite dev
-                "http://localhost:5500",  // plain HTML dev
-                "http://127.0.0.1:5500",
-                "https://agrineeds.netlify.app" // your Netlify URL
+        cfg.setAllowedOriginPatterns(List.of(
+                "http://localhost:*",
+                "https://agrineeds.netlify.app"
         ));
+
 
         cfg.setAllowedMethods(List.of("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
         cfg.setAllowedHeaders(List.of("*"));
