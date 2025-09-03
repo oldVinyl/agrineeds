@@ -20,7 +20,7 @@ public class OrderItem extends BaseEntity {
     private Order order;
 
 
-    // ✅ store as varchar; exactly what frontend sends
+
     @Column(name = "product_id", length = 36, nullable = false)
     private String productId;
 
