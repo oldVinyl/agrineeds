@@ -1,6 +1,7 @@
 // js/api.js
-// const BASE_URL = window.API_BASE_URL || "/mock";
-const BASE_URL = "agrineeds-production.up.railway.app" || "/mock";
+
+// Use the deployed backend in production, or mock if not set
+const BASE_URL = window.API_BASE_URL || "https://agrineeds-production.up.railway.app";
 const USE_MOCK = BASE_URL === "/mock";
 
 const LS_KEYS = {
